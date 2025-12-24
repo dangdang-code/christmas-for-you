@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Giáng Sinh Ấm Áp</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Charmonman:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-pink: #ea4848;
+            --soft-blue: #d3e7f5;
+            --gold: #ffd700;
+        }
+
+        body {
+            margin: 0; padding: 0;
+            font-family: 'Dancing Script', cursive;
+            background: linear-gradient(to bottom, #d3e7f5, #f0f8ff);
+            height: 100vh; overflow: hidden;
+            display: flex; justify-content: center; align-items: center;
+        }
+
+        /* Tuyết rơi chậm */
+        .snowflake {
+            color: #a1a0a0; position: absolute; top: -10%;
+            animation: fall linear infinite; opacity: 0.8;
+            user-select: none; pointer-events: none;
+        }
+        @keyframes fall {
+            0% { transform: translateY(-10vh) translateX(0) rotate(0deg); }
+            100% { transform: translateY(105vh) translateX(50px) rotate(360deg); }
+        }
+
+        /* Khung nội dung */
+        .screen {
+            width: 90%; max-width: 500px; /* Làm khung to hơn */
+            background: rgba(255, 255, 255, 0.85);
+            padding: 40px 25px; border-radius: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            text-align: center; position: absolute;
+            transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .hidden { opacity: 0; visibility: hidden; transform: scale(0.8); pointer-events: none; }
+        .exit-zoom { transform: scale(0) rotate(10deg); opacity: 0; }
+
+        /* Cánh cửa */
+        .door-container { width: 130px; height: 170px; margin: 20px auto; cursor: pointer; perspective: 1000px; }
+        .door-img { width: 100%; height: 100%; object-fit: contain; transition: transform 0.8s; }
+        .door-container:active .door-img { transform: rotateY(-70deg); }
+
+        /* Khung lời chúc TO HƠN */
+        .message-box {
+            min-height: 250px; /* Tăng chiều cao */
+            display: flex; align-items: center; justify-content: center;
+            border: 2px dashed var(--primary-pink);
+            border-radius: 25px; padding: 20px; margin-bottom: 25px;
+            background: rgba(255, 255, 255, 0.433);
+            position: relative;
+        }
+
+        #text-content { font-size: 1.5em; line-height: 1.6; color: #444; }
+
+        /* Nút bấm */
+        .btn-group { display: flex; gap: 15px; }
+        button {
+            background: var(--primary-pink); color: white; border: none;
+            padding: 12px 20px; border-radius: 50px;
+            font-family: 'Charmonman', cursive; flex: 1;
+            box-shadow: 0 4px 15px rgba(244, 194, 194, 0.4);
+            cursor: pointer; transition: 0.3s;
+        }
+        button:disabled { background: #ccc; box-shadow: none; cursor: not-allowed; }
+
+        /* Ngôi sao lấp lánh */
+        .star {
+            position: absolute; background: var(--gold);
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+            animation: twinkle 1.5s infinite ease-in-out;
+        }
+        @keyframes twinkle { 0%, 100% { opacity: 0.3; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.2); } }
+
+        /* Heart & Santa */
+        .heart-pop { position: absolute; font-size: 20px; animation: heartFly 1s forwards; pointer-events: none; }
+        @keyframes heartFly { 0% { opacity: 1; transform: scale(0); } 100% { opacity: 0; transform: translateY(-80px) scale(1.5); } }
+        
+        .santa-icon {
+            width: 50px; position: absolute; bottom: -20px; right: 10px;
+            cursor: pointer; animation: float 2s infinite alternate; display: none;
+        }
+        @keyframes float { from { transform: translateY(0); } to { transform: translateY(-10px); } }
+      }
+      body {
+    margin: 0;
+    font-family: 'Dancing Script', cursive; /* Font chính cho sự dịu dàng */
+    overflow: hidden; /* Ẩn thanh cuộn */
+    background: linear-gradient(to bottom, #d3e7f5, #f0f8ff); /* Nền màu chuyển nhẹ nhàng */
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    position: relative;
+}
+
+/* Hiệu ứng tuyết rơi */
+.snowflakes {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.snowflake {
+    color: #fff;
+    font-size: 1.5em;
+    font-family: Arial, sans-serif;
+    text-shadow: 0 0 3px rgba(255, 255, 255, 0.7);
+    position: absolute;
+    top: -10%;
+    animation: fall linear infinite;
+    opacity: 0;
+}
+
+@keyframes fall {
+    0% {
+        transform: translateY(-10%) translateX(0%);
+        opacity: 0;
+    }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% {
+        transform: translateY(100%) translateX(20%);
+        opacity: 0;
+    }
+}
+
+/* Tạo nhiều bông tuyết với tốc độ và vị trí khác nhau */
+.snowflake:nth-child(1) { left: 5%; animation-duration: 10s; animation-delay: 0s; }
+.snowflake:nth-child(2) { left: 15%; animation-duration: 12s; animation-delay: 1s; }
+.snowflake:nth-child(3) { left: 25%; animation-duration: 9s; animation-delay: 2s; }
+.snowflake:nth-child(4) { left: 35%; animation-duration: 11s; animation-delay: 3s; }
+.snowflake:nth-child(5) { left: 45%; animation-duration: 13s; animation-delay: 4s; }
+.snowflake:nth-child(6) { left: 55%; animation-duration: 8s; animation-delay: 5s; }
+.snowflake:nth-child(7) { left: 65%; animation-duration: 10s; animation-delay: 6s; }
+.snowflake:nth-child(8) { left: 75%; animation-duration: 12s; animation-delay: 7s; }
+.snowflake:nth-child(9) { left: 85%; animation-duration: 9s; animation-delay: 8s; }
+.snowflake:nth-child(10) { left: 95%; animation-duration: 11s; animation-delay: 9s; }
+
+.container {
+    width: 90%; /* Tối ưu cho di động */
+    max-width: 400px; /* Giới hạn chiều rộng trên màn hình lớn */
+    background: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    position: absolute;
+    transition: all 0.8s ease-in-out;
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(0.9);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.container.active {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1);
+    position: relative;
+}
+
+/* Màn hình chào mừng */
+.welcome-screen {
+    z-index: 5;
+}
+
+.welcome-text-wrapper {
+    margin-bottom: 30px;
+    height: 80px; /* Đảm bảo đủ không gian cho 2 dòng */
+}
+
+.welcome-text-line {
+    font-family: 'Charmonman', cursive;
+    font-size: 1.3em;
+    color: #070707;
+    margin: 5px 0;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 1s forwards;
+}
+
+.welcome-text-line.line1 {
+    animation-delay: 0.5s;
+}
+
+.welcome-text-line.line2 {
+    animation-delay: 1.5s;
+}
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.door-wrapper {
+    position: relative;
+    width: 150px; /* Kích thước cánh cửa */
+    height: 200px;
+    margin: 20px auto;
+    cursor: pointer;
+    perspective: 1000px; /* Cho hiệu ứng 3D */
+}
+
+.magic-door {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: transform 1s ease-in-out;
+    transform-style: preserve-3d; /* Giữ 3D khi xoay */
+}
+
+.magic-door:active { /* Khi chạm vào */
+    transform: rotateY(-70deg) translateZ(50px) scale(0.8); /* Cánh cửa mở ra */
+}
+
+.door-hint {
+    position: absolute;
+    bottom: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.8em;
+    color: #888;
+    opacity: 0;
+    animation: pulseHint 2s infinite ease-in-out 3s forwards; /* Hiển thị sau 3s */
+}
+
+@keyframes pulseHint {
+    0% { opacity: 0.5; transform: translateX(-50%) scale(1); }
+    50% { opacity: 1; transform: translateX(-50%) scale(1.05); }
+    100% { opacity: 0.5; transform: translateX(-50%) scale(1); }
+}
+
+/* Hiệu ứng "hút vào" khi cánh cửa mở */
+.welcome-screen.exit-animation {
+    animation: shrinkAndFade 1s forwards;
+}
+
+@keyframes shrinkAndFade {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.5;
+        transform: scale(0.5);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0.1);
+        visibility: hidden;
+    }
+}
+
+/* Màn hình tin nhắn */
+.message-screen {
+    z-index: 10;
+    padding: 30px 20px;
+    min-height: 250px; /* Đảm bảo đủ chỗ cho tin nhắn dài */
+    justify-content: space-between; /* Để các thành phần cách đều */
+}
+
+.message-box {
+    flex-grow: 1; /* Cho phép giãn nở để chứa tin nhắn */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    min-height: 150px; /* Đảm bảo không gian cho lời chúc */
+}
+
+#christmasMessage {
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.4em; /* Kích thước chữ to, dễ đọc trên di động */
+    color: #4CAF50; /* Màu xanh lá cây Giáng sinh */
+    line-height: 1.6;
+    margin-bottom: 25px;
+    min-height: 150px; /* Đảm bảo chiều cao không bị nhảy */
+    display: flex;
+    align-items: center;
+    text-align: center;
+}
+
+
+.message-controls {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.control-button {
+    background-color: #f4c2c2; /* Màu hồng dịu */
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-family: 'Charmonman', cursive;
+    font-size: 0.9em;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    opacity: 0; /* Ban đầu ẩn */
+    pointer-events: none; /* Không thể tương tác khi ẩn */
+}
+
+.control-button:hover {
+    background-color: #b86b6b;
+    transform: translateY(-2px);
+}
+
+.control-button:disabled {
+    opacity: 0.4 !important;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.control-button:not([disabled]) {
+    pointer-events: auto; /* Có thể tương tác khi không bị disabled */
+}
+
+/* Easter Egg: Ông già Noel */
+.santa-hint {
+    position: absolute;
+    bottom: -10px;
+    right: 10px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    pointer-events: none; /* Không tương tác cho đến khi active */
+}
+
+.santa-hint.active {
+    opacity: 1;
+    pointer-events: auto;
+    animation: bounceSanta 1s infinite alternate; /* Hiệu ứng nảy */
+}
+
+@keyframes bounceSanta {
+    from { transform: translateY(0px); }
+    to { transform: translateY(-5px); }
+}
+
+.santa-icon {
+    width: 40px;
+    height: 40px;
+    margin-right: 5px;
+}
+
+.hint-text {
+    font-family: 'Charmonman', cursive;
+    font-size: 0.8em;
+    color: #888;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 5px 8px;
+    border-radius: 10px;
+    white-space: nowrap;
+}
+
+
+/* Easter Egg: Bông tuyết bí ẩn */
+.easter-egg-snowflake {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    font-size: 1.8em;
+    color: #ADD8E6; /* Xanh da trời nhạt */
+    cursor: pointer;
+    z-index: 10;
+    transition: transform 0.3s ease;
+    text-shadow: 0 0 5px rgba(173, 216, 230, 0.7);
+}
+
+.easter-egg-snowflake:hover {
+    transform: rotate(360deg) scale(1.2);
+}
+
+/* Confetti effect */
+.confetti-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 20;
+}
+
+.confetti {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: #f00; /* Default color, will be randomized */
+    animation: confettiFall 3s forwards;
+    opacity: 0;
+    border-radius: 50%; /* Make them round */
+}
+
+@keyframes confettiFall {
+    0% {
+        transform: translateY(-10vh) rotate(0deg);
+        opacity: 0;
+    }
+    10% { opacity: 1; }
+    100% {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+    }
+}
+
+
+/* Điều chỉnh responsive */
+@media (max-width: 480px) {
+    .container {
+        width: 95%;
+        padding: 15px;
+    }
+    .welcome-text-line {
+        font-size: 1.1em;
+    }
+    .magic-door {
+        width: 120px;
+        height: 160px;
+    }
+    #christmasMessage {
+        font-size: 1.2em;
+    }
+    .control-button {
+        padding: 8px 12px;
+        font-size: 0.8em;
+    }
+    .santa-icon {
+        width: 30px;
+        height: 30px;
+    }
+    .hint-text {
+        font-size: 0.7em;
+    }
+    .easter-egg-snowflake {
+        font-size: 1.5em;
+        top: 10px;
+        left: 10px;
+    }
+}
+    </style>
+</head>
+<body>
+
+    <audio id="bgMusic" loop>
+        <source src="nhacnoel.mp3" type="audio/mp3">
+    </audio>
+
+    <div id="screen1" class="screen" style="z-index: 100;"> 
+    <div style="font-size: 1.3em; color: #ee6fc5; margin-bottom: 20px; font-weight: bold;">
+        Noel này, tớ có điều muốn nói... <br>
+        Chạm vào để mở!
+    </div>
+        <div class="door-container" onclick="openDoor()">
+            <img src="https://cdn-icons-png.flaticon.com/512/3753/3753031.png" class="door-img">
+        </div>
+    </div>
+
+    <div id="screen2" class="screen hidden">
+        <div class="message-box" id="mainBox">
+            <div id="text-content"></div>
+            </div>
+        <div class="btn-group">
+            <button id="prevBtn" onclick="changeMsg(-1)">Quay lại</button>
+            <button id="nextBtn" onclick="changeMsg(1)">Tiếp theo →</button>
+        </div>
+        <img src="https://cdn-icons-png.flaticon.com/512/2311/2311488.png" class="santa-icon" id="santa" onclick="alert('🎅🏻Ông già Noel nhắn rằng: Chúc cậu luôn suôn sẻ và mỉm cười cho những điều cậu mong.... 🎁')">
+    </div>
+
+    <script>
+        const messages = [
+            "Giáng sinh này, chúc cậu luôn cảm thấy ấm áp, không chỉ từ chiếc khăn len mà còn từ những điều nhỏ bé xung quanh. Mong cậu luôn mỉm cười như cách cậu vẫn thường làm👼",
+            "Chúc cậu một mùa Noel thật bình yên. Hy vọng giữa cái lạnh này, cậu vẫn tìm thấy những khoảng trống ngọt ngào cho riêng mình🎀",
+            "Giáng sinh là mùa của những phép màu. Chúc cho những dự định sắp tới của cậu đều thành hiện thực🌟",
+            "Tớ muốn tặng cậu một chút ấm áp qua tin nhắn này. Chúc cậu có một mùa Noel thật vui vẻ nhé!🥳",
+            "Và ngoài lề một chút, chúc cậu kì thi sắp tới sẽ có một tâm lí thật vững vàng để chiến đấu và có một kết quả thật mãn nguyện như cậu vẫn mong🔥"
+        ];
+
+        let currentIdx = 0;
+        let isTyping = false;
+        let typingTimer;
+
+        function createSnow() {
+            for(let i=0; i<20; i++) {
+                let snow = document.createElement('div');
+                snow.className = 'snowflake';
+                snow.innerHTML = '❄';
+                snow.style.left = Math.random() * 100 + 'vw';
+                snow.style.animationDuration = (Math.random() * 10 + 15) + 's';
+                snow.style.fontSize = (Math.random() * 10 + 10) + 'px';
+                document.body.appendChild(snow);
+            }
+        }
+        createSnow();
+
+        function openDoor() {
+            const music = document.getElementById('bgMusic');
+            music.volume = 0.2; music.play().catch(()=>{});
+            document.getElementById('screen1').classList.add('exit-zoom');
+            setTimeout(() => {
+                document.getElementById('screen1').style.display = 'none';
+                document.getElementById('screen2').classList.remove('hidden');
+                typeText();
+            }, 800);
+        }
+
+        function typeText() {
+            isTyping = true;
+            document.getElementById('prevBtn').disabled = true;
+            document.getElementById('nextBtn').disabled = true;
+            
+            let text = messages[currentIdx];
+            let i = 0;
+            const container = document.getElementById('text-content');
+            container.innerHTML = "";
+            
+            clearInterval(typingTimer);
+            typingTimer = setInterval(() => {
+                if (i < text.length) {
+                    container.innerHTML += text.charAt(i);
+                    i++;
+                } else {
+                    clearInterval(typingTimer);
+                    isTyping = false;
+                    checkButtons();
+                }
+            }, 50);
+        }
+
+        function changeMsg(dir) {
+            if (isTyping) return;
+            currentIdx += dir;
+            // Xóa sao cũ nếu có
+            const stars = document.querySelectorAll('.star');
+            stars.forEach(s => s.remove());
+            typeText();
+        }
+
+        function checkButtons() {
+            document.getElementById('prevBtn').disabled = (currentIdx === 0);
+            const nextBtn = document.getElementById('nextBtn');
+            const santa = document.getElementById('santa');
+
+            if (currentIdx === messages.length - 1) {
+                nextBtn.innerHTML = "Hết ồi ❤️";
+                nextBtn.disabled = true;
+                santa.style.display = "block";
+                createStars(); // Hiện sao lấp lánh ở câu cuối
+            } else {
+                nextBtn.innerHTML = "Tiếp theo →";
+                nextBtn.disabled = false;
+                santa.style.display = "none";
+            }
+        }
+
+        function createStars() {
+            const box = document.getElementById('mainBox');
+            for(let i=0; i<8; i++) {
+                let star = document.createElement('div');
+                star.className = 'star';
+                star.style.width = star.style.height = (Math.random() * 10 + 5) + 'px';
+                star.style.left = Math.random() * 90 + '%';
+                star.style.top = Math.random() * 90 + '%';
+                star.style.animationDelay = (Math.random() * 2) + 's';
+                box.appendChild(star);
+            }
+        }
+
+        document.addEventListener('click', (e) => {
+            if(e.target.tagName === 'BUTTON') return;
+            const heart = document.createElement('div');
+            heart.innerHTML = '❤️';
+            heart.className = 'heart-pop';
+            heart.style.left = e.pageX + 'px'; heart.style.top = e.pageY + 'px';
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 1000);
+        });
+    </script>
+</body>
+</html>
